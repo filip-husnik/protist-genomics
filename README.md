@@ -5,7 +5,7 @@ Assembly and annotation of protist genomes
 
 1. [Introduction](#introduction)
 2. [Dependencies](#dependencies)
-3. Genome assembly
+3. [Genome assembly](#genome-assembly)
 4. Transcriptome assembly
 5. Contamination removal
 6. [Repeat masking](#repeat-finding-and-masking)
@@ -20,10 +20,49 @@ Any suggestions and critiques are welcome!
 
 # Dependencies
 
-For detecting and masking repeats, I use two programs: [RepeatModeler](http://www.repeatmasker.org/RepeatModeler/)
-and [RepeatMasker](http://www.repeatmasker.org/). However, these programs can be sometimes difficult to install and rely on numerous dependencies. If you know of an alternative way how to do this, please let me know!
+- [FastP](https://github.com/OpenGene/fastp)
+- [SPAdes](http://cab.spbu.ru/software/spades)
+- [Megahit](https://github.com/voutcn/megahit)
+- [Trinity](https://github.com/trinityrnaseq/trinityrnaseq/wiki)
+- [Blobtools](https://blobtools.readme.io/docs)
+- [Autometa](https://bitbucket.org/jason_c_kwan/autometa)
+- [BUSCO](https://busco.ezlab.org/)
+- [STAR](https://github.com/alexdobin/STAR)
+- [RepeatModeler](http://www.repeatmasker.org/RepeatModeler/)
+- [RepeatMasker](http://www.repeatmasker.org/)
+- [BRAKER2](https://github.com/Gaius-Augustus/BRAKER)
 
-For gene prediction, I use [BRAKER2](https://github.com/Gaius-Augustus/BRAKER). Braker2 relies on Augustus and GeneMarkET and can take advantage of RNA-Seq data. For mapping RNA-Seq reads, I use the [STAR aligner](https://github.com/alexdobin/STAR).
+RepeatModeler and RepeatMaskers can be sometimes difficult to install and rely on numerous dependencies. If you know of an alternative way how to do this, please let me know!
+
+# Genome assembly
+
+Quality trimming
+```
+fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz
+```
+Genome assembly (genomes <1000Mbp)
+```
+/opt/SPAdes-3.13.0-Linux/bin/spades.py -o default_spades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --careful --threads 24
+```
+Contamination assessment for the SPAdes assembly
+```
+cd default_spades
+blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -culling_limit 5 -num_threads 16 -evalue 1e-25 -max_target_seqs 5 > assembly_vs_nt.blastn
+/opt/bin/diamond blastx --query scaffolds.fasta --max-target-seqs 1 --sensitive --threads 14 --db /scratch/uniprot/uniprot_ref_proteomes.diamond.dmnd --evalue 1e-25 --outfmt 6 --out scaffolds.fasta.vs.uniprot_ref.mts1.1e25.out
+/opt/blobtools/blobtools taxify -f scaffolds.fasta.vs.uniprot_ref.mts1.1e25.out -m /scratch/uniprot/uniprot_ref_proteomes.taxids -s 0 -t 2 
+/opt/blobtools/blobtools create -i scaffolds.fasta -y spades -t scaffolds_vs_nt.blastn -t scaffolds.fasta.vs.uniprot_ref.mts1.1e25.taxified.out
+/opt/blobtools/blobtools blobplot -i blobDB.json -r superkingdom
+/opt/blobtools/blobtools blobplot -i blobDB.json
+/opt/blobtools/blobtools view -i blobDB.json --rank all
+```
+Completeness assessment
+```
+/opt/busco/scripts/run_BUSCO.py -i scaffolds.fasta -c 16 -m genome -l /opt/busco/databases/eukaryota_odb9/ --long
+```
+Genome assembly (genomes >1000Mbp)
+```
+megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
+```
 
 # Repeat finding and masking
 
@@ -50,7 +89,7 @@ Repeat masking will in most cases increase gene prediction accuracy. It reduces 
 ```
 2) Convert and sort sam to sorted.bam with Samtools
 
-3) run braker with hints from RNA-Seq data
+3) run Braker2 with hints from RNA-Seq data
 ```
 braker.pl --species=species_name --genome=scaffolds_filtered.fasta --bam=../STAR_RNA-Seq_mapping/Aligned.out.sorted.bam
 ```
