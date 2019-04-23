@@ -26,6 +26,9 @@ and [RepeatMasker](http://www.repeatmasker.org/). However, these programs can be
 For gene prediction, I use [BRAKER2](https://github.com/Gaius-Augustus/BRAKER). Braker2 relies on Augustus and GeneMarkET and can take advantage of RNA-Seq data. For mapping RNA-Seq reads, I use the [STAR aligner](https://github.com/alexdobin/STAR).
 
 # Repeat finding and masking
+
+Repeat masking will in most cases increase gene prediction accuracy. It reduces prediction of false genes in repetitive and low complexity genome regions. However, it's always useful to compare gene prediction between an unmasked and masked assembly to see any negative effects (for example, masking of real genes in gene-rich and repeat-poor genomes).
+
 1) build a RepeatModeler database
 ```
 /opt/RepeatModeler-open-1.0.11/BuildDatabase -name species_name -engine ncbi scaffolds_filtered.fasta
