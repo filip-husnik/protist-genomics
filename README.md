@@ -37,6 +37,7 @@ RepeatModeler and RepeatMaskers can be sometimes difficult to install and rely o
 # Genome assembly
 
 Quality trimming
+
 ```
 fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz
 ```
@@ -66,6 +67,30 @@ Completeness assessment
 Genome assembly (genomes >1000Mbp)
 ```
 megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
+```
+# Transcriptome assembly
+
+Quality trimming
+
+Standard RNA extraction and library prep (e.g. from culture)
+
+```
+fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz
+```
+
+Single-cell RNA-Seq (SMART-Seq2 protocol with IS primers)
+
+```
+fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz --adapter_fasta /opt/Nextera_adapters_ISprimer.fa
+```
+Transcriptome assembly with RNA-SPAdes
+
+```
+/opt/SPAdes-3.13.0-Linux/bin/rnaspades.py -o default_rnaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-3 --threads 16 --memory 150
+
+Transcriptome assembly with Trinity
+
+/opt/trinityrnaseq-Trinity-v2.4.0/Trinity --seqType fq --left out.R1.fq.gz --right out.R2.fq.gz --CPU 16 --full_cleanup --output default_trinity --max_memory 150G
 ```
 
 # Repeat finding and masking
