@@ -57,7 +57,7 @@ blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6
 ```
 SSU contamination assessment (for libraries >150bp, use -readlength 250/300)
 ```
-/opt/phyloFlash-pf3.3b1/phyloFlash.pl -lib LIBNAME -CPUS 16 -read1 out.R1.fq.gz -read2 out.R2.fq.gz -dbhome /Data/filip/phyloFlash_DB/128/ -everything -id 55
+/opt/phyloFlash-pf3.3b1/phyloFlash.pl -lib LIBNAME -CPUS 16 -read1 out.R1.fq.gz -read2 out.R2.fq.gz -dbhome /Data/filip/phyloFlash_DB/128/ -everything -id 55 -trusted scaffolds.fasta
 ```
 Completeness assessment
 ```
