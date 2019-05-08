@@ -6,7 +6,7 @@ Assembly and annotation of protist genomes
 1. [Introduction](#introduction)
 2. [Dependencies](#dependencies)
 3. [Genome assembly](#genome-assembly)
-4. Transcriptome assembly
+4. [Transcriptome assembly](#transcriptome-assembly)
 5. Contamination removal
 6. [Repeat masking](#repeat-finding-and-masking)
 7. [Gene prediction](#gene-prediction)
@@ -84,12 +84,11 @@ Single-cell RNA-Seq (SMART-Seq2 protocol with IS primers)
 fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz --adapter_fasta /opt/Nextera_adapters_ISprimer.fa
 ```
 Transcriptome assembly with RNA-SPAdes
-
 ```
 /opt/SPAdes-3.13.0-Linux/bin/rnaspades.py -o default_rnaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-3 --threads 16 --memory 150
-
+```
 Transcriptome assembly with Trinity
-
+```
 /opt/trinityrnaseq-Trinity-v2.4.0/Trinity --seqType fq --left out.R1.fq.gz --right out.R2.fq.gz --CPU 16 --full_cleanup --output default_trinity --max_memory 150G
 ```
 
