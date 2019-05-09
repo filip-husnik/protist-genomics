@@ -85,7 +85,7 @@ fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 
 ```
 Transcriptome assembly with RNA-SPAdes
 ```
-/opt/SPAdes-3.13.0-Linux/bin/rnaspades.py -o default_rnaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-3 --threads 16 --memory 150
+/opt/SPAdes-3.13.0-Linux/bin/rnaspades.py -o default_rnaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --threads 16 --memory 150
 ```
 Transcriptome assembly with Trinity
 ```
