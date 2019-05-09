@@ -48,7 +48,7 @@ Genome assembly (genomes <1000Mbp)
 Contamination assessment for the SPAdes assembly
 ```
 cd default_spades
-blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -culling_limit 5 -num_threads 16 -evalue 1e-25 -max_target_seqs 5 > assembly_vs_nt.blastn
+blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -culling_limit 5 -num_threads 16 -evalue 1e-25 -max_target_seqs 5 > scaffolds_vs_nt.blastn
 /opt/bin/diamond blastx --query scaffolds.fasta --max-target-seqs 1 --sensitive --threads 14 --db /scratch/uniprot/uniprot_ref_proteomes.diamond.dmnd --evalue 1e-25 --outfmt 6 --out scaffolds.fasta.vs.uniprot_ref.mts1.1e25.out
 /opt/blobtools/blobtools taxify -f scaffolds.fasta.vs.uniprot_ref.mts1.1e25.out -m /scratch/uniprot/uniprot_ref_proteomes.taxids -s 0 -t 2 
 /opt/blobtools/blobtools create -i scaffolds.fasta -y spades -t scaffolds_vs_nt.blastn -t scaffolds.fasta.vs.uniprot_ref.mts1.1e25.taxified.out
