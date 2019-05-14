@@ -64,7 +64,11 @@ Completeness assessment
 ```
 /opt/busco/scripts/run_BUSCO.py -i scaffolds.fasta -c 16 -m genome -l /opt/busco/databases/eukaryota_odb9/ --long
 ```
-Genome assembly (genomes >1000Mbp)
+Genome assembly for genomes and metagenomes >1000Mbp
+
+```
+/opt/SPAdes-3.13.0-Linux/bin/metaspades.py -o default_metaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --threads 24
+```
 ```
 megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
 ```
