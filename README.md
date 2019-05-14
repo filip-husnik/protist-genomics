@@ -56,11 +56,11 @@ blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6
 /opt/blobtools/blobtools blobplot -i blobDB.json
 /opt/blobtools/blobtools view -i blobDB.json --rank all
 ```
-SSU contamination assessment (for libraries <150bp,e.g. HiSeq)
+SSU contamination assessment (for reads <150bp, e.g. HiSeq)
 ```
 /opt/phyloFlash-pf3.3b1/phyloFlash.pl -lib LIBNAME -CPUS 16 -read1 out.R1.fq.gz -read2 out.R2.fq.gz -dbhome /Data/filip/phyloFlash_DB/128/ -everything -id 55 -trusted scaffolds.fasta
 ```
-SSU contamination assessment (for libraries of 250bp,e.g. MiSeq)
+SSU contamination assessment (for reads of 250bp, e.g. MiSeq)
 ```
 /opt/phyloFlash-pf3.3b1/phyloFlash.pl -lib LIBNAME -CPUS 16 -read1 out.R1.fq.gz -read2 out.R2.fq.gz -dbhome /Data/filip/phyloFlash_DB/128/ -everything -id 55 -trusted scaffolds.fasta -readlength 250
 ```
