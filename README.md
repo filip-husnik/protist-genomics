@@ -76,6 +76,35 @@ Genome assembly for genomes and metagenomes >1000Mbp
 ```
 megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
 ```
+Metagenome binning with Autometa
+
+```
+/scratch/autometa/pipeline/run_autometa.py --assembly scaffolds.fasta --processors 16 --length_cutoff 500 --maketaxtable --ML_recruitment
+```
+
+Splitting bacterial contigs into genome bins (e.g. when interested in symbionts)
+
+```
+/scratch/autometa/pipeline/cluster_process.py --bin_table ML_recruitment_output.tab --column ML_expanded_clustering --fasta Bacteria.fasta --do_taxonomy --db_dir /scratch/autometa/databases --output_dir cluster_process_output
+```
+Visualizing the bacterial bins
+
+```
+R
+library(ggplot2)
+data = read.table('ML_recruitment_output.tab', header=TRUE, sep='\t')
+
+```
+```
+ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = ML_expanded_clustering )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('BH-tSNE X') + ylab('BH-tSNE Y') + guides( color = guide_legend( title = 'Cluster/bin' ))
+```
+```
+ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = phylum )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('BH-tSNE X') + ylab('BH-tSNE Y') + guides( color = guide_legend( title = 'Phylum' ))
+```
+```
+ggplot( data, aes( x = cov, y = gc, col = ML_expanded_clustering )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('Coverage') + ylab('GC (%)') + guides( color = guide_legend( title = 'Cluster/bin' )) + scale_x_continuous( limits = c( 200, 250 ))
+```
+
 # Transcriptome assembly
 
 Quality trimming
