@@ -105,6 +105,11 @@ ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = phylum )) + geom_point( a
 ggplot( data, aes( x = cov, y = gc, col = ML_expanded_clustering )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('Coverage') + ylab('GC (%)') + guides( color = guide_legend( title = 'Cluster/bin' )) + scale_x_continuous( limits = c( 200, 250 ))
 ```
 
+Annotating a bacterial genome
+```
+/opt/prokka/bin/prokka --outdir PROKKA_annotation --compliant --gram neg --rfam scaffolds.fasta
+```
+
 Dot plot alignment of two closely related bacterial genomes
 ```
 nucmer reference.fasta query.fasta
