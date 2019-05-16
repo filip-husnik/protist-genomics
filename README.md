@@ -105,6 +105,18 @@ ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = phylum )) + geom_point( a
 ggplot( data, aes( x = cov, y = gc, col = ML_expanded_clustering )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('Coverage') + ylab('GC (%)') + guides( color = guide_legend( title = 'Cluster/bin' )) + scale_x_continuous( limits = c( 200, 250 ))
 ```
 
+Dot plot alignment of two closely related bacterial genomes
+```
+nucmer reference.fasta query.fasta
+mummerplot -s large --layout -t png out.delta
+```
+Dot plot alignment of two bacterial genomes
+```
+promer reference.fasta query.fasta
+mummerplot -s large --layout -t png out.delta
+```
+
+
 # Transcriptome assembly
 
 Quality trimming
