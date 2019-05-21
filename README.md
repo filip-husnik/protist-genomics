@@ -112,7 +112,8 @@ Extracting a bacterial genome from a metagenome based on its assembly graph (oft
 4. Find and extract scaffolds corresponding to these nodes
 ```
 grep "NODE_" symbiont_selected_nodes.fasta | cut -f 2 -d '_' > symbiont_selected_nodes.txt
-grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | sort | uniq > symbiont_selected_nodes_to_scaffolds.txt
+grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | sort | uniq |
+ cut -f 1,2,3,4,5,6 -d '_' > symbiont_selected_nodes_to_scaffolds.txt
 perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' symbiont_selected_nodes_to_scaffolds.txt scaffolds.fasta > symbiont_selected_nodes_to_scaffolds.fasta
 ```
 
