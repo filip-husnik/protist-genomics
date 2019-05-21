@@ -45,7 +45,7 @@ Genome assembly (genomes <1000Mbp)
 ```
 /opt/SPAdes-3.13.0-Linux/bin/spades.py -o default_spades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --careful --threads 24
 ```
-Contamination assessment for the SPAdes assembly
+Contamination assessment for the SPAdes assembly (every protist genome is a metagenome)
 ```
 cd default_spades
 blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -culling_limit 5 -num_threads 16 -evalue 1e-25 -max_target_seqs 5 > scaffolds_vs_nt.blastn
@@ -104,7 +104,7 @@ ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = phylum )) + geom_point( a
 ```
 ggplot( data, aes( x = cov, y = gc, col = ML_expanded_clustering )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('Coverage') + ylab('GC (%)') + guides( color = guide_legend( title = 'Cluster/bin' )) + scale_x_continuous( limits = c( 200, 250 ))
 ```
-Extracting a bacterial genome from a metagenome based on its assembly graph
+Extracting a bacterial genome from a metagenome based on its assembly graph (often works for symbionts)
 
 1. Open assembly_graph_with_scaffolds.gfa in Bandage [https://github.com/rrwick/Bandage]
 2. Identify your genome of interest and select its graph (interconnected nodes)
@@ -112,7 +112,8 @@ Extracting a bacterial genome from a metagenome based on its assembly graph
 4. Find and extract scaffolds corresponding to these nodes
 ```
 grep "NODE_" symbiont_selected_nodes.fasta | cut -f 2 -d '_' > symbiont_selected_nodes.txt
-grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | sort | uniq > symbiont_selected_nodes_to_scaffolds.fasta
+grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | sort | uniq > symbiont_selected_nodes_to_scaffolds.txt
+perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' symbiont_selected_nodes_to_scaffolds.txt scaffolds.fasta > symbiont_selected_nodes_to_scaffolds.fasta
 ```
 
 Annotating a bacterial genome
