@@ -174,10 +174,10 @@ Repeat masking will in most cases increase gene prediction accuracy. It reduces 
 ```
 /opt/RepeatMasker/RepeatMasker -pa 10 -lib consensi.fa.classified scaffolds_filtered.fasta
 ```
-# Gene prediction
+# Gene prediction (using the masked assembly as a reference)
 1) run RNA-Seq mapping with STAR
 ```
-/opt/STAR-2.7.0a/STAR --runMode genomeGenerate --runThreadN 24   --genomeDir genomeDir/ --genomeFastaFiles scaffolds_filtered.fasta --limitGenomeGenerateRAM 67543940821
+/opt/STAR-2.7.0a/STAR --runMode genomeGenerate --runThreadN 24   --genomeDir genomeDir/ --genomeFastaFiles scaffolds_filtered_masked.fasta --limitGenomeGenerateRAM 67543940821
 
 /opt/STAR-2.7.0a/STAR --runThreadN 24 --genomeDir genomeDir/ --readFilesIn R1_001.fastq.gz R2_001.fastq.gz --readFilesCommand zcat
 ```
@@ -185,5 +185,17 @@ Repeat masking will in most cases increase gene prediction accuracy. It reduces 
 
 3) run Braker2 with hints from RNA-Seq data
 ```
-braker.pl --species=species_name --genome=scaffolds_filtered.fasta --bam=../STAR_RNA-Seq_mapping/Aligned.out.sorted.bam
+braker.pl --species=species_name --genome=scaffolds_filtered_masked.fasta --bam=../STAR_RNA-Seq_mapping/Aligned.out.sorted.bam
 ```
+
+# Gene prediction (using unmasked assembly)
+1) run RNA-Seq mapping with STAR
+```
+/opt/STAR-2.7.0a/STAR --runMode genomeGenerate --runThreadN 24   --genomeDir genomeDir/ --genomeFastaFiles scaffolds_filtered.fasta --limitGenomeGenerateRAM 67543940821
+/opt/STAR-2.7.0a/STAR --runThreadN 24 --genomeDir genomeDir/ --readFilesIn R1_001.fastq.gz R2_001.fastq.gz --readFilesCommand zcat
+```
+2) Convert and sort sam to sorted.bam with Samtools
+
+3) run Braker2 with hints from RNA-Seq data
+```
+braker.pl --species=species_name --genome=scaffolds_filtered.fasta --bam=Aligned.out.sorted.bam
