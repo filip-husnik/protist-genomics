@@ -185,6 +185,7 @@ mkdir genomeDir
 2) Convert and sort sam to sorted.bam with Samtools (recent version, such as 1.9)
 ```
 samtools view -bS Aligned.out.sam --threads 16 | samtools sort - -o Aligned.out.sorted.bam --threads 16
+samtools index Aligned.out.sorted.bam
 ```
 
 3) run Braker2 with hints from RNA-Seq data
@@ -202,6 +203,7 @@ mkdir genomeDir
 2) Convert and sort sam to sorted.bam with Samtools (recent version, such as 1.9)
 ```
 samtools view -bS Aligned.out.sam --threads 16 | samtools sort - -o Aligned.out.sorted.bam --threads 16
+samtools index Aligned.out.sorted.bam
 ```
 3) run Braker2 with hints from RNA-Seq data
 ```
