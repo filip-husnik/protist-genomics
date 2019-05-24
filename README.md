@@ -174,7 +174,8 @@ Repeat masking will in most cases increase gene prediction accuracy. It reduces 
 ```
 /opt/RepeatMasker/RepeatMasker -pa 10 -lib consensi.fa.classified scaffolds_filtered.fasta
 ```
-# Gene prediction (using the masked assembly as a reference)
+# Gene prediction
+(A) using the masked assembly as a reference
 1) run RNA-Seq mapping with STAR
 ```
 /opt/STAR-2.7.0a/STAR --runMode genomeGenerate --runThreadN 24   --genomeDir genomeDir/ --genomeFastaFiles scaffolds_filtered_masked.fasta --limitGenomeGenerateRAM 67543940821
@@ -188,7 +189,7 @@ Repeat masking will in most cases increase gene prediction accuracy. It reduces 
 braker.pl --species=species_name --genome=scaffolds_filtered_masked.fasta --bam=../STAR_RNA-Seq_mapping/Aligned.out.sorted.bam
 ```
 
-# Gene prediction (using unmasked assembly)
+(B) using unmasked assembly
 1) run RNA-Seq mapping with STAR
 ```
 /opt/STAR-2.7.0a/STAR --runMode genomeGenerate --runThreadN 24   --genomeDir genomeDir/ --genomeFastaFiles scaffolds_filtered.fasta --limitGenomeGenerateRAM 67543940821
