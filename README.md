@@ -191,6 +191,8 @@ samtools index Aligned.out.sorted.bam
 3) run Braker2 with hints from RNA-Seq data
 ```
 braker.pl --species=species_name --genome=scaffolds_filtered_masked.fasta --bam=../STAR_RNA-Seq_mapping/Aligned.out.sorted.bam --cores=24
+
+/opt/augustus_3.3_works/scripts/getAnnoFasta.pl --seqfile=genome.fa augustus.hints.gff
 ```
 
 (B) using the unmasked assembly as a reference
@@ -208,5 +210,6 @@ samtools index Aligned.out.sorted.bam
 3) run Braker2 with hints from RNA-Seq data
 ```
 braker.pl --species=species_name --genome=scaffolds_filtered.fasta --bam=Aligned.out.sorted.bam --cores=24
+/opt/augustus_3.3_works/scripts/getAnnoFasta.pl --seqfile=genome.fa augustus.hints.gff
 ```
 If GeneMark fails, renew its license in your home directory [https://github.com/Gaius-Augustus/BRAKER#perl-pipeline-dependencies].
