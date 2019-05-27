@@ -8,7 +8,7 @@ Assembly and annotation of protist genomes
 3. [Genome assembly](#genome-assembly)
 4. [Transcriptome assembly](#transcriptome-assembly)
 5. Contamination removal
-6. [Repeat masking](#repeat-finding-and-masking)
+6. [Repeat finding and masking](#repeat-finding-and-masking)
 7. [Gene prediction](#gene-prediction)
 
 
@@ -112,8 +112,7 @@ Extracting a bacterial genome from a metagenome based on its assembly graph (oft
 4. Find and extract scaffolds corresponding to these nodes
 ```
 grep "NODE_" symbiont_selected_nodes.fasta | cut -f 2 -d '_' > symbiont_selected_nodes.txt
-grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | sort | uniq |
- cut -f 1,2,3,4,5,6 -d '_' > symbiont_selected_nodes_to_scaffolds.txt
+grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | sort | uniq | cut -f 1,2,3,4,5,6 -d '_' > symbiont_selected_nodes_to_scaffolds.txt
 perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' symbiont_selected_nodes_to_scaffolds.txt scaffolds.fasta > symbiont_selected_nodes_to_scaffolds.fasta
 ```
 
@@ -158,7 +157,7 @@ Transcriptome assembly with Trinity
 /opt/trinityrnaseq-Trinity-v2.4.0/Trinity --seqType fq --left out.R1.fq.gz --right out.R2.fq.gz --CPU 16 --full_cleanup --output default_trinity --max_memory 150G
 ```
 
-# Repeat finding and masking
+# Repeat finding and soft masking
 
 Repeat masking will in most cases increase gene prediction accuracy. It reduces prediction of false genes in repetitive and low complexity genome regions. However, it's always useful to compare gene prediction between an unmasked and masked assembly to see any negative effects (for example, masking of real genes in gene-rich and repeat-poor genomes).
 
@@ -170,16 +169,21 @@ Repeat masking will in most cases increase gene prediction accuracy. It reduces 
 ```
 /opt/RepeatModeler-open-1.0.11/RepeatModeler -pa 24 -database species_name -engine ncbi >& run.out
 ```
-3) run RepeatMasker
+3) run RepeatMasker to hard mask the reference (replace repeat sequences with Ns) 
 ```
-/opt/RepeatMasker/RepeatMasker -pa 10 -lib consensi.fa.classified scaffolds_filtered.fasta
+/opt/RepeatMasker/RepeatMasker -pa 24 -html -gff -s -no_is -small -lib consensi.fa.classified scaffolds_filtered.fasta
 ```
+4) run ProcessRepats to soft mask the reference instead (i.e. change repeat sequences to lowercase, recommended)
+```
+/opt/RepeatMasker/ProcessRepeats -maskSource scaffolds_filtered.fasta -xsmall scaffolds_filtered.fasta.cat.gz
+```
+
 # Gene prediction
-(A) using the masked assembly as a reference
+(A) using the soft masked assembly generated above as a reference
 1) run RNA-Seq mapping with STAR
 ```
 mkdir genomeDir
-/opt/STAR-2.7.0a/STAR --runMode genomeGenerate --runThreadN 24   --genomeDir genomeDir --genomeFastaFiles scaffolds_filtered_masked.fasta --limitGenomeGenerateRAM 67543940821
+/opt/STAR-2.7.0a/STAR --runMode genomeGenerate --runThreadN 24   --genomeDir genomeDir --genomeFastaFiles scaffolds_filtered_softmasked.fasta --limitGenomeGenerateRAM 67543940821
 /opt/STAR-2.7.0a/STAR --runThreadN 24 --genomeDir genomeDir --readFilesIn R1_001.fastq.gz R2_001.fastq.gz --readFilesCommand zcat
 ```
 2) Convert and sort sam to sorted.bam with Samtools (recent version, such as 1.9)
@@ -189,11 +193,13 @@ samtools index Aligned.out.sorted.bam
 ```
 
 3) run Braker2 with hints from RNA-Seq data
+
 ```
-braker.pl --species=species_name --genome=scaffolds_filtered_masked.fasta --bam=../STAR_RNA-Seq_mapping/Aligned.out.sorted.bam --cores=24
+braker.pl --species=species_name --genome=scaffolds_filtered_softmasked.fasta --bam=../STAR_RNA-Seq_mapping/Aligned.out.sorted.bam --cores=24 --softmasking
 
 /opt/augustus_3.3_works/scripts/getAnnoFasta.pl --seqfile=genome.fa augustus.hints.gff
 ```
+If GeneMark fails, renew its license in your home directory [https://github.com/Gaius-Augustus/BRAKER#perl-pipeline-dependencies].
 
 (B) using the unmasked assembly as a reference
 1) run RNA-Seq mapping with STAR
@@ -212,4 +218,3 @@ samtools index Aligned.out.sorted.bam
 braker.pl --species=species_name --genome=scaffolds_filtered.fasta --bam=Aligned.out.sorted.bam --cores=24
 /opt/augustus_3.3_works/scripts/getAnnoFasta.pl --seqfile=genome.fa augustus.hints.gff
 ```
-If GeneMark fails, renew its license in your home directory [https://github.com/Gaius-Augustus/BRAKER#perl-pipeline-dependencies].
