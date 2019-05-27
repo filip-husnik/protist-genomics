@@ -8,7 +8,7 @@ Assembly and annotation of protist genomes
 3. [Genome assembly](#genome-assembly)
 4. [Transcriptome assembly](#transcriptome-assembly)
 5. Contamination removal
-6. [Repeat finding and masking](#repeat-finding-and-masking)
+6. [Repeat finding and soft masking](#repeat-finding-and-soft-masking)
 7. [Gene prediction](#gene-prediction)
 
 
