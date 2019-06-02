@@ -75,7 +75,10 @@ Genome assembly for genomes and metagenomes >1000Mbp
 /opt/SPAdes-3.13.0-Linux/bin/metaspades.py -o default_metaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --threads 24
 ```
 ```
-megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
+/opt/megahit/megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
+/opt/megahit/megahit_toolkit contig2fastg 141 ./intermediate_contigs/k141.contigs.fa > k141.fastg
+/opt/bbmap/bbwrap.sh ref=final.contigs.fa in=out.R1.fq.gz in2=out.R2.fq.gz out=aln.sam.gz kfilter=22 subfilter=15 maxindel=80
+/opt/bbmap/pileup.sh in=aln.sam.gz out=cov.txt
 ```
 Metagenome binning with Autometa
 
