@@ -106,7 +106,11 @@ ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = ML_expanded_clustering ))
 ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = phylum )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('BH-tSNE X') + ylab('BH-tSNE Y') + guides( color = guide_legend( title = 'Phylum' ))
 ```
 ```
-ggplot( data, aes( x = cov, y = gc, col = ML_expanded_clustering )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('Coverage') + ylab('GC (%)') + guides( color = guide_legend( title = 'Cluster/bin' )) + scale_x_continuous( limits = c( 200, 250 ))
+ggplot( data, aes( x = bh_tsne_x, y = bh_tsne_y, col = order )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('BH-tSNE X') + ylab('BH-tSNE Y') + guides( color = guide_legend( title = 'Order' ))
+```
+Note: change coverage limits based on your coverage c( 0, 5000 )
+```
+ggplot( data, aes( x = cov, y = gc, col = ML_expanded_clustering )) + geom_point( aes( alpha = 0.5, size = sqrt( data$length ) / 100 )) + guides( color = 'legend', size = 'none', alpha = 'none' ) + theme_classic() + xlab('Coverage') + ylab('GC (%)') + guides( color = guide_legend( title = 'Cluster/bin' )) + scale_x_continuous( limits = c( 0, 5000 ))
 ```
 Extracting a bacterial genome from a metagenome based on its assembly graph (often works for symbionts)
 
