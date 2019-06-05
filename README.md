@@ -83,13 +83,13 @@ Genome assembly for genomes and metagenomes >1000Mbp
 Metagenome binning with Autometa
 
 ```
-run_autometa.py --assembly scaffolds.fasta --processors 16 --length_cutoff 500 --maketaxtable --ML_recruitment
+run_autometa.py --assembly scaffolds.fasta --processors 16 --length_cutoff 500 --maketaxtable --ML_recruitment --output_dir autometa_default
 ```
 
 Splitting bacterial contigs into genome bins (e.g. when interested in symbionts)
 
 ```
-cluster_process.py --bin_table ML_recruitment_output.tab --column ML_expanded_clustering --fasta Bacteria.fasta --do_taxonomy --db_dir /home/filip/autometa/databases --output_dir cluster_process_output
+cluster_process.py --bin_table ML_recruitment_output.tab --column ML_expanded_clustering --fasta Bacteria.fasta --do_taxonomy --db_dir /scratch/Filip_storage/autometa/databases --output_dir cluster_process_output
 ```
 Visualizing the bacterial bins
 
