@@ -77,8 +77,15 @@ Genome assembly for genomes and metagenomes >1000Mbp
 ```
 /opt/megahit/megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
 /opt/megahit/megahit_toolkit contig2fastg 141 ./intermediate_contigs/k141.contigs.fa > k141.fastg
+```
+Getting sequencing coverage for the Megahit assembly (Bowtie2+map2cov or BBmap)
+```
 /opt/bbmap/bbwrap.sh ref=final.contigs.fa in=out.R1.fq.gz in2=out.R2.fq.gz out=aln.sam.gz kfilter=22 subfilter=15 maxindel=80
 /opt/bbmap/pileup.sh in=aln.sam.gz out=cov.txt
+
+bowtie2-build final.contigs.fa final.contigs.fa
+bowtie2 -p 16 -q --mm -x final.contigs.fa -1 out.R1.fq.gz -2 out.R2.fq.gz > aligned.sam
+/opt/blobtools/blobtools map2cov -i final.contigs.fa -s aligned.sam
 ```
 Metagenome binning with Autometa
 
