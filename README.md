@@ -91,19 +91,18 @@ grep "#" -v aligned.sam.cov | cut -f 1,3 > aligned.coverage.autometa.tab
 
 ```
 Metagenome binning with Autometa
-All steps at once (change -k to archaea if needed)
 
+Running all steps in sequence (change -k to archaea if needed)
 ```
 run_autometa.py --assembly scaffolds.fasta --processors 16 --length_cutoff 3000 --maketaxtable --ML_recruitment --output_dir autometa_default -db /media/Data1/Filip_autometa/autometa/databases -k bacteria
 ```
 
-Step by step
+Running step by step
 ```
 make_taxonomy_table.py --assembly scaffolds.fasta --processors 16 --length_cutoff 3000
 run_autometa.py --assembly Bacteria.fasta --processors 16 --length_cutoff 3000 --taxonomy_table taxonomy.tab
 ML_recruitment.py --contig_tab recursive_dbscan_output.tab --k_mer_matrix k-mer_matrix --out_table ML_recruitment_output.tab
 ```
-
 
 Splitting bacterial contigs into genome bins (e.g. when interested in symbionts)
 
