@@ -55,6 +55,7 @@ blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6
 /opt/blobtools/blobtools create -i scaffolds.fasta -y spades -t scaffolds_vs_nt.blastn -t scaffolds.fasta.vs.uniprot_ref.mts1.1e25.taxified.out
 /opt/blobtools/blobtools blobplot -i blobDB.json -r superkingdom
 /opt/blobtools/blobtools blobplot -i blobDB.json
+/opt/blobtools/blobtools blobplot -i blobDB.json -r order
 /opt/blobtools/blobtools view -i blobDB.json --rank all
 ```
 SSU contamination assessment (for reads <150bp, e.g. HiSeq)
@@ -86,12 +87,23 @@ Getting sequencing coverage for the Megahit assembly (Bowtie2+map2cov or BBmap)
 bowtie2-build final.contigs.fa final.contigs.fa
 bowtie2 -p 16 -q --mm -x final.contigs.fa -1 out.R1.fq.gz -2 out.R2.fq.gz > aligned.sam
 /opt/blobtools/blobtools map2cov -i final.contigs.fa -s aligned.sam
-```
-Metagenome binning with Autometa
+grep "#" -v aligned.sam.cov | cut -f 1,3 > aligned.coverage.autometa.tab
 
 ```
-run_autometa.py --assembly scaffolds.fasta --processors 16 --length_cutoff 500 --maketaxtable --ML_recruitment --output_dir autometa_default
+Metagenome binning with Autometa
+All steps at once (change -k to archaea if needed)
+
 ```
+run_autometa.py --assembly scaffolds.fasta --processors 16 --length_cutoff 3000 --maketaxtable --ML_recruitment --output_dir autometa_default -db /media/Data1/Filip_autometa/autometa/databases -k bacteria
+```
+
+Step by step
+```
+make_taxonomy_table.py --assembly scaffolds.fasta --processors 16 --length_cutoff 3000
+run_autometa.py --assembly Bacteria.fasta --processors 16 --length_cutoff 3000 --taxonomy_table taxonomy.tab
+ML_recruitment.py --contig_tab recursive_dbscan_output.tab --k_mer_matrix k-mer_matrix --out_table ML_recruitment_output.tab
+```
+
 
 Splitting bacterial contigs into genome bins (e.g. when interested in symbionts)
 
