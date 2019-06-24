@@ -146,6 +146,11 @@ Annotating a bacterial genome
 ```
 /opt/prokka/bin/prokka --outdir PROKKA_annotation --compliant --gram neg --rfam scaffolds.fasta
 ```
+Inferring orthologs, gene alignments, and gene trees for a set of proteomes (one proteome per fasta file)
+
+```
+/opt/OrthoFinder-2.3.3/orthofinder -f directory_with_proteomes -t 24 -M msa -A mafft -S diamond -T fasttree
+```
 
 Dot plot alignment of two closely related bacterial genomes
 ```
