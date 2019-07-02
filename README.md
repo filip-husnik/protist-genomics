@@ -152,6 +152,15 @@ Inferring orthologs, gene alignments, and gene trees for a set of proteomes (one
 /opt/OrthoFinder-2.3.3/orthofinder -f directory_with_proteomes -t 24 -M msa -A mafft -S diamond -T fasttree
 ```
 
+Trimming single-gene alignments with trimal
+```
+for file in *.fasta; do trimal -in "$file" -out trimal_"$file" -automated1; done
+```
+Concatenating single-gene protein alignments into a multi-gene alignment
+```
+java -jar /opt/phyutility/phyutility.jar -concat -in trimal_* -out concatenated_alignment.fasta --aa
+```
+
 Dot plot alignment of two closely related bacterial genomes
 ```
 nucmer reference.fasta query.fasta
