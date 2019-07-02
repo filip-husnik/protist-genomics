@@ -149,6 +149,10 @@ Annotating a bacterial genome
 Inferring orthologs, gene alignments, and gene trees for a set of proteomes (one proteome per fasta file)
 
 ```
+#First, rename your proteins to have consistent headers and to be easier to work with
+awk '/^>/{print ">SpeciesXYZ_" ++i; next}{print}' < proteome.faa > proteome_renamed.faa
+```
+```
 /opt/OrthoFinder-2.3.3/orthofinder -f directory_with_proteomes -t 24 -M msa -A mafft -S diamond -T fasttree
 ```
 
