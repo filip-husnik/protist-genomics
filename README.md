@@ -149,7 +149,7 @@ Annotating a bacterial genome
 Inferring orthologs, gene alignments, and gene trees for a set of proteomes (one proteome per fasta file)
 
 ```
-#First, rename your proteins to have consistent headers and to be easier to work with
+#First, rename your proteins to have consistent headers
 awk '/^>/{print ">SpeciesXYZ_" ++i; next}{print}' < proteome.faa > proteome_renamed.faa
 ```
 ```
@@ -161,6 +161,10 @@ Trimming single-gene alignments with trimal
 for file in *.fasta; do trimal -in "$file" -out trimal_"$file" -automated1; done
 ```
 Concatenating single-gene protein alignments into a multi-gene alignment
+```
+#remove protein identifiers from fasta files (only species names needed for concatenation)
+for file in trimal_*; do cut -d'_' -f1 < "$file" > for_concatenation_"$file"; done
+```
 ```
 java -jar /opt/phyutility/phyutility.jar -concat -in trimal_* -out concatenated_alignment.fasta --aa
 ```
