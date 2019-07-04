@@ -163,10 +163,10 @@ for file in *.fasta; do trimal -in "$file" -out trimal_"$file" -automated1; done
 Concatenating single-gene protein alignments into a multi-gene alignment
 ```
 #remove protein identifiers from fasta files (only species names needed for concatenation)
-for file in trimal_*; do cut -d'_' -f1 < "$file" > for_concatenation_"$file"; done
+for file in trimal_*; do sed "s/_[^_]*$//" "$file" > for_concatenation_"$file"; done
 ```
 ```
-java -jar /opt/phyutility/phyutility.jar -concat -in trimal_* -out concatenated_alignment.fasta --aa
+java -jar /opt/phyutility/phyutility.jar -concat -in trimal_* -out concatenated_alignment.fasta -aa
 ```
 
 Dot plot alignment of two closely related bacterial genomes
