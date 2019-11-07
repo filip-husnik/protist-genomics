@@ -90,6 +90,15 @@ bowtie2 -p 16 -q --mm -x final.contigs.fa -1 out.R1.fq.gz -2 out.R2.fq.gz > alig
 grep "#" -v aligned.sam.cov | cut -f 1,3 > aligned.coverage.autometa.tab
 
 ```
+Extracting reads mapping to a subset of contigs (map all reads to the complete assembly and use bamfilter to filter based on contig ids)
+```
+bowtie2-build contigs.fasta contigs.fasta
+bowtie2 -x contigs.fasta -p 24 -1 forward.fastq.gz -2 reverse.fastq.gz | samtools view -Sb - > contigs.fasta.mapped.bam
+/opt/blobtools/blobtools bamfilter -b contigs.fasta.mapped.bam -i ids.txt --sort --keep --threads 24
+cat *.InIn.fq *.InUn.fq > subset_mapped.fastq
+cat subset_mapped.fastq | paste - - - - - - - - | tee >(cut -f 1-4 | tr "\t" "\n" > subset_mapped.F.fastq) | cut -f 5-8 | tr "\t" "\n" > subset_mapped.R.fastq
+```
+
 Metagenome binning with Autometa
 
 Running all steps in sequence (change -k to archaea if needed)
