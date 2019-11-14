@@ -213,6 +213,15 @@ Transcriptome assembly with Trinity
 ```
 /opt/trinityrnaseq-Trinity-v2.4.0/Trinity --seqType fq --left out.R1.fq.gz --right out.R2.fq.gz --CPU 16 --full_cleanup --output default_trinity --max_memory 150G
 ```
+Proteome prediction with TransDecoder
+```
+/opt/TransDecoder-TransDecoder-v5.5.0/TransDecoder.LongOrfs -t transcripts.fasta
+/opt/TransDecoder-TransDecoder-v5.5.0/TransDecoder.Predict -t transcripts.fasta
+```
+Completeness assessment with BUSCO
+```
+/opt/busco/scripts/run_BUSCO.py -i transcripts.fasta -c 16 -m transcriptome -l /opt/busco/databases/eukaryota_odb9/ --long
+```
 
 # Repeat finding and soft masking
 
