@@ -68,7 +68,7 @@ SSU contamination assessment (for reads of 250bp, e.g. MiSeq)
 ```
 Completeness assessment
 ```
-/opt/busco/scripts/run_BUSCO.py -i scaffolds.fasta -c 16 -m genome -l /opt/busco/databases/eukaryota_odb9/ --long
+/opt/busco/scripts/run_BUSCO.py -i scaffolds.fasta -c 16 -m genome -l /opt/busco/databases/eukaryota_odb9/ --long --out BUSCO_genome
 ```
 Genome assembly for genomes and metagenomes >1000Mbp
 
@@ -220,7 +220,8 @@ Proteome prediction with TransDecoder
 ```
 Completeness assessment with BUSCO
 ```
-/opt/busco/scripts/run_BUSCO.py -i transcripts.fasta -c 16 -m transcriptome -l /opt/busco/databases/eukaryota_odb9/ --long
+/opt/busco/scripts/run_BUSCO.py -i transcripts.fasta -c 16 -m transcriptome -l /opt/busco/databases/eukaryota_odb9/ --long --out BUSCO_transcr
+/opt/busco/scripts/run_BUSCO.py -i transcripts.fasta -c 16 -m proteins -l /opt/busco/databases/eukaryota_odb9/ --long --out BUSCO_prot 
 ```
 
 # Repeat finding and soft masking
