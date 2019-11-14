@@ -197,13 +197,13 @@ Quality trimming
 Standard RNA extraction and library prep (e.g. from culture)
 
 ```
-fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz
+fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz --html LIBNAME_fastp.html --json LIBNAME_fastp.json --thread 12
 ```
 
 Single-cell RNA-Seq (SMART-Seq2 protocol with IS primers)
 
 ```
-fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz --adapter_fasta /opt/Nextera_adapters_ISprimer.fa
+fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz --adapter_fasta /opt/Nextera_adapters_ISprimer.fa --html LIBNAME_fastp.html --json LIBNAME_fastp.json --thread 12
 ```
 Transcriptome assembly with RNA-SPAdes
 ```
