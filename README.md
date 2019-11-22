@@ -46,7 +46,7 @@ Genome assembly (genomes <1000Mbp)
 ```
 /opt/SPAdes-3.13.0-Linux/bin/spades.py -o default_spades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --careful --threads 24
 ```
-Contamination assessment for the SPAdes assembly (every protist genome is a metagenome)
+Contamination assessment for the SPAdes assembly with Blobtools1 (every protist genome is a metagenome)
 ```
 cd default_spades
 blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' -culling_limit 5 -num_threads 16 -evalue 1e-25 -max_target_seqs 5 > scaffolds_vs_nt.blastn
@@ -58,6 +58,17 @@ blastn -task megablast -query scaffolds.fasta -db /scratch/NCBI_NT/nt -outfmt '6
 /opt/blobtools/blobtools blobplot -i blobDB.json -r order
 /opt/blobtools/blobtools view -i blobDB.json --rank all
 ```
+
+Contamination assessment for the SPAdes assembly with Blobtools2 (every protist genome is a metagenome)
+```
+blastn -db nt -query assembly.fasta -outfmt "6 qseqid staxids bitscore std" -max_target_seqs 10 -max_hsps 1 -evalue 1e-25 -num_threads 16 -out blast.out
+
+diamond blastx --query assembly.fasta --db /path/to/uniprot.db.with.taxids --outfmt 6 qseqid staxids bitscore qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore --sensitive --max-target-seqs 1 --evalue 1e-25 --threads 16 > diamond.out
+
+minimap2 -ax sr -t 16 assembly.fasta reads_1.fastq.gz reads_2.fastq.gz | samtools sort -@16 -O BAM -o assembly.reads.bam -
+
+```
+
 SSU contamination assessment (for reads <150bp, e.g. HiSeq)
 ```
 /opt/phyloFlash-pf3.3b1/phyloFlash.pl -lib LIBNAME -CPUS 16 -read1 out.R1.fq.gz -read2 out.R2.fq.gz -dbhome /Data/filip/phyloFlash_DB/128/ -everything -id 55 -trusted scaffolds.fasta
