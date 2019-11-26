@@ -156,10 +156,16 @@ Extracting a bacterial genome from a metagenome based on its assembly graph (oft
 2. Identify your genome of interest and select its graph (interconnected nodes)
 3. Output->Save selected nodes sequences to FASTA -> symbiont_selected_nodes.fasta
 4. Find and extract scaffolds corresponding to these nodes
+
 ```
+#for SPAdes assemblies
 grep "NODE_" symbiont_selected_nodes.fasta | cut -f 2 -d '_' > symbiont_selected_nodes.txt
-grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | cut -f 1,2,3,4,5,6 -d '_' | sort | uniq > symbiont_selected_nodes_to_scaffolds.txt
-perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' symbiont_selected_nodes_to_scaffolds.txt scaffolds.fasta > symbiont_selected_nodes_to_scaffolds.fasta
+grep -f symbiont_selected_nodes.txt assembly_graph_with_scaffolds.gfa | cut -f 2 | cut -f 1,2,3,4,5,6 -d '_' | sort | uniq > symbiont_selected_nodes_SPAdes.txt
+
+#for Megahit k141 assemblies
+grep ">" symbiont_selected_nodes.fasta | cut -f 2 -d'_' | sed s"/^/k141_/" | sed s"/+/ /"g | sed s"/-/ /"g |  sort | uniq > symbiont_selected_nodes_Megahit.txt
+
+perl -ne 'if(/^>(\S+)/){$c=$i{$1}}$c?print:chomp;$i{$_}=1 if @ARGV' symbiont_selected_nodes_SPAdes.txt scaffolds.fasta > symbiont_selected_nodes_to_scaffolds.fasta
 ```
 
 Annotating a bacterial genome
