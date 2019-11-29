@@ -39,12 +39,12 @@ RepeatModeler and RepeatMaskers can be sometimes difficult to install and rely o
 Quality trimming (+provide adapters with --adapter_fasta adapters.fasta depending on your library prep)
 
 ```
-fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz --detect_adapter_for_pe --detect_adapter_for_pe --html LIBNAME_fastp.html --json LIBNAME_fastp.json --thread 12
+fastp -i in.R1.fq.gz -I in.R2.fq.gz -o out.R1.fq.gz -O out.R2.fq.gz --unpaired1 out.RS.fq.gz --unpaired2 out.RS.fq.gz --detect_adapter_for_pe --html LIBNAME_fastp.html --thread 12
 ```
 
 Genome assembly (genomes <1000Mbp)
 ```
-/opt/SPAdes-3.13.0-Linux/bin/spades.py -o default_spades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --careful --threads 24
+/opt/SPAdes-3.13.2-Linux/bin/spades.py -o default_spades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --careful --threads 24
 ```
 Contamination assessment for the SPAdes assembly with Blobtools1 (every protist genome is a metagenome)
 ```
@@ -84,7 +84,7 @@ Completeness assessment
 Genome assembly for genomes and metagenomes >1000Mbp
 
 ```
-/opt/SPAdes-3.13.0-Linux/bin/metaspades.py -o default_metaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --threads 24
+/opt/SPAdes-3.13.2-Linux/bin/metaspades.py -o default_metaspades --pe1-1 out.R1.fq.gz --pe1-2 out.R2.fq.gz --pe1-s out.RS.fq.gz --threads 24
 ```
 ```
 /opt/megahit/megahit -t 24 -1 out.R1.fq.gz -2 out.R2.fq.gz -r out.RS.fq.gz
